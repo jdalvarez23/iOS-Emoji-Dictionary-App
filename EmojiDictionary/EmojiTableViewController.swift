@@ -71,6 +71,8 @@ class EmojiTableViewController: UITableViewController {
         cell.textLabel?.text = "\(emoji.symbol) - \(emoji.name)"
         cell.detailTextLabel?.text = emoji.description
         
+        cell.showsReorderControl = true
+        
         return cell
     }
     
@@ -81,7 +83,35 @@ class EmojiTableViewController: UITableViewController {
         print("\(emoji.symbol) \(indexPath)")
         
     }
- 
+    
+    // method that executes when the edit button is pressed
+    @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
+        
+        let tableViewEditingMode = tableView.isEditing
+        
+        tableView.setEditing(!tableViewEditingMode, animated: true)
+        
+        if (!tableViewEditingMode) {
+            print("User is currently editing...")
+            
+            sender.title = "Done"
+            
+        } else {
+            print("User stopped editing...")
+            
+            sender.title = "Edit"
+        }
+        
+    }
+    
+    // Override to remove the delete indicator
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        
+        return .none
+        
+    }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -103,12 +133,20 @@ class EmojiTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
 
+        /* NOTE: the following code will remove the data within emojis at fromIndexPath.row and add it back at to.row */
+        
+        let movedEmoji = emojis.remove(at: fromIndexPath.row)
+        
+        emojis.insert(movedEmoji, at: to.row)
+        
+        tableView.reloadData()
+        
     }
-    */
+    
 
     /*
     // Override to support conditional rearranging of the table view.
