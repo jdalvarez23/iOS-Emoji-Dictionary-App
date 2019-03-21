@@ -63,6 +63,7 @@ class EmojiTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        /*
         let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell", for: indexPath)
 
         // Configure the cell...
@@ -71,11 +72,24 @@ class EmojiTableViewController: UITableViewController {
         cell.textLabel?.text = "\(emoji.symbol) - \(emoji.name)"
         cell.detailTextLabel?.text = emoji.description
         
-        cell.showsReorderControl = true
+        cell.showsReorderControl = true // display reorder control (at right of its content) when editing mode is on
+        */
         
+        // Dequeue the cell... (update to use new custom cell)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EmojiCell") as! EmojiTableViewCell
+        
+        // Fetch model object to display...
+        let emoji = emojis[indexPath.row]
+        
+        // Configure the cell...
+        cell.update(with: emoji)
+        cell.showsReorderControl = true // display reorder control (at right of its content) when editing mode is on
+        
+        // Return the cell...
         return cell
     }
     
+    /*
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let emoji = emojis[indexPath.row]
@@ -83,6 +97,7 @@ class EmojiTableViewController: UITableViewController {
         print("\(emoji.symbol) \(indexPath)")
         
     }
+    */
     
     // method that executes when the edit button is pressed
     @IBAction func editButtonTapped(_ sender: UIBarButtonItem) {
@@ -104,10 +119,11 @@ class EmojiTableViewController: UITableViewController {
         
     }
     
-    // Override to remove the delete indicator
+    // Override to support editing styles for rows of the table view.
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         
-        return .none
+        // return .none
+        return .delete
         
     }
     
@@ -121,17 +137,19 @@ class EmojiTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            // Delete the emoji from the array
+            emojis.remove(at: indexPath.row)
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
 
     
     // Override to support rearranging the table view.
